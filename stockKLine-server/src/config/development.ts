@@ -1,8 +1,8 @@
 const config = {
     PORT: 8081,
-    secretKey: 'SeedServer',
+    secretKey: '43gh.we',
     db: {
-        uri: 'mongodb://127.0.0.1:27017/seedD',
+        uri: 'mongodb://127.0.0.1:27017/StockKLineD',
         user: '',
         password: ''
     },
