@@ -23,6 +23,8 @@
     "@angular/router": "^4.0.0",
     "core-js": "^2.4.1",
     "echarts": "^3.8.5",
+    "fontawesome": "^4.7.2",
+    "ng-zorro-antd": "^0.5.5",
     "rxjs": "^5.4.1",
     "zone.js": "^0.8.14"
   },
@@ -42,6 +44,8 @@
     "karma-coverage-istanbul-reporter": "^1.2.1",
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "ng-zorro-antd": "^0.6.2",
+    "node-sass": "^4.7.2",
     "protractor": "~5.1.2",
     "ts-node": "~3.0.4",
     "tslint": "~5.3.2",
