@@ -9,6 +9,7 @@ export class AppComponent {
   title = 'app';
   options: [any]
   selectedOption: any
+  left_active: boolean
   constructor() {
     this.options = [
       { value: 'jack', label: 'Jack' },
@@ -16,5 +17,10 @@ export class AppComponent {
       { value: 'disabled', label: 'Disabled', disabled: true }
     ];
     this.selectedOption = this.options[ 0 ];
+    this.left_active = false;
+  }
+
+  toggleLeft() {
+    this.left_active = !this.left_active;
   }
 }

@@ -45,6 +45,10 @@
             display: flex;
             justify-content: flex-end;
             align-items: center;
+            padding-right: 20px;
+            .user_login{
+                margin: 0 5px;
+            }
         }
     }
     .content{
@@ -53,17 +57,27 @@
         padding-top: 50px;
         display: flex;
         .left {
-            width: 200px;
+            width: 0;
             background: #F0F;
             flex-shrink: 0;
+            transition: width 300ms;
+            overflow-x: hidden;
+            &.active{
+                width: 200px;
+            }
         }
         .main {
             width: 100%;
         }
         .right {
-            width: 200px;
+            width: 0;
             background: #F0F;
             flex-shrink: 0;
+            transition: width 300ms;
+            overflow-x: hidden;
+            &.active{
+                width: 200px;
+            }
         }
     }
 }

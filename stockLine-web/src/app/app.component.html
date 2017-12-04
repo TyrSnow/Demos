@@ -4,23 +4,23 @@
             <img class="icon" src="/assets/argus.png" />
         </div>
         <div class="controls">
-            <i class="fa fa-folder"></i>
+            <i class="fa fa-folder" (click)="toggleLeft()"></i>
             <i class="fa fa-lock"></i>
         </div>
         <div class="user">
-            <nz-select style="width: 120px;" nzAllowClear>
+            <!-- <nz-select style="width: 120px;" nzAllowClear>
                 <nz-option
                     *ngFor="let option of options"
                     [nzLabel]="option.label"
                     [nzValue]="option"
                     [nzDisabled]="option.disabled">
                 </nz-option>
-            </nz-select>
-            <span>您还没有登陆</span>
+            </nz-select> -->
+            <span class="noLogin">您还没有<a class="user_login">登陆</a></span>
         </div>
     </div>
     <div class="content">
-        <div class="left">左侧股票</div>
+        <div class="left" [class.active]="left_active">左侧股票</div>
         <div class="main">行情框</div>
         <div class="right">右侧</div>
     </div>
