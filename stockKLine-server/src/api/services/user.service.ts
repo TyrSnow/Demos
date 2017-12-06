@@ -148,7 +148,7 @@ class UserSrv {
         user: UserModel.IUser,
         name: string,
         pwd: string
-    ): Promise<UserModel.IUserInfo> {
+    ): Promise<UserModel.IUser> {
         return new Promise((resolve, reject) => {
             if (valid_password(name, user.sault, pwd, user.password)) {
                 resolve(user);
