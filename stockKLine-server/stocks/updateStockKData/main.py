@@ -9,17 +9,12 @@ stockList = ts.get_stock_basics()
 
 stocks = stockList.index
 
-THREADS_TOTAL = 16
-divides_stocks = []
+THREADS_TOTAL = 8
+stocks_count = len(stocks)
+stocksQueue = Queue.Queue()
 err_stocks = Queue.Queue()
-for i in range(THREADS_TOTAL):
-    divides_stocks.append([])
-    
-count = 0
-for stock in stocks:
-    shade_index = count % THREADS_TOTAL
-    divides_stocks[shade_index].append(stock)
-    count+= 1
+for i in range(stocks_count):
+    stocksQueue.put(stocks[i]);
 
 def fetch_stock(stock):
     try:
@@ -30,17 +25,16 @@ def fetch_stock(stock):
         err_stocks.put(stock)
         time.sleep(5)
     
-def fetch_stocks(name, stocks):
-    l = len(stocks)
-    l0 = l - 1
-    for i in range(l):
-        print "[Thread %s]Fetching %s, %d / %d \n" % (name, stocks[i], i, l0)
-        fetch_stock(stocks[i])
+def fetch_stocks(name):
+    while stocksQueue.not_empty:
+        stock = stocksQueue.get(False)
+        print "[Thread %s]Fetching %s, and %d stocks last.\n" % (name, stock, stocksQueue.qsize())
+        fetch_stock(stock)
     print "[Thread %s]Fetching Success. \n" % name
 thrs = []
 start_time = time.time()
 for i in range(THREADS_TOTAL):
-    thr = threading.Thread(target=fetch_stocks,args=(i, divides_stocks[i]))
+    thr = threading.Thread(target=fetch_stocks,args=(i,))
     thr.start()
     thrs.append(thr)
 
