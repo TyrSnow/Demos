@@ -1,41 +1,59 @@
 # -*- coding: utf-8 -*-
 import tushare as ts
 import json
-from pymongo import MongoClient
 import threading
+import time
+import Queue
 
-TREAD_COUNT = 8
-# 获取所有股票的列表
 stockList = ts.get_stock_basics()
-_stocks = stockList.index
-count = 1
-s = []
-for i in range(TREAD_COUNT):
-    s.append([])
 
-for code in _stocks:
-    p = count % TREAD_COUNT
-    s[p].append(code)
+stocks = stockList.index
+
+THREADS_TOTAL = 16
+divides_stocks = []
+err_stocks = Queue.Queue()
+for i in range(THREADS_TOTAL):
+    divides_stocks.append([])
+    
+count = 0
+for stock in stocks:
+    shade_index = count % THREADS_TOTAL
+    divides_stocks[shade_index].append(stock)
     count+= 1
 
-def fetch_stock_data(collection, code):
-    _hist = ts.get_hist_data(code)
-    _hist = _hist.reset_index()
-    data = {
-        "code": code,
-        "data": _hist.to_csv()
-    }
-    collection.insert(data)
+def fetch_stock(stock):
+    try:
+        data = ts.get_hist_data(stock)
+        data.to_csv("./Data/%s.csv" % stock)
+    except:
+        print "Fetch %s Error, retry after 5 seconds \n" % stock
+        err_stocks.put(stock)
+        time.sleep(5)
+    
+def fetch_stocks(name, stocks):
+    l = len(stocks)
+    l0 = l - 1
+    for i in range(l):
+        print "[Thread %s]Fetching %s, %d / %d \n" % (name, stocks[i], i, l0)
+        fetch_stock(stocks[i])
+    print "[Thread %s]Fetching Success. \n" % name
+thrs = []
+start_time = time.time()
+for i in range(THREADS_TOTAL):
+    thr = threading.Thread(target=fetch_stocks,args=(i, divides_stocks[i]))
+    thr.start()
+    thrs.append(thr)
 
-def updata_stocks(_i, codes):
-    conn = MongoClient('mongodb://localhost:27017/')
-    db = conn.StockKLineD
-    collection = db.k
-    total = len(codes)
-    for i in range(total):
-        print "[ Thread %d ]Fetch data: %s, %d / %d" % (_i, codes[i], i, total)
-        fetch_stock_data(collection, codes[i])
-    print "[ Thread %d]Finished!" % _i
+for i in range(THREADS_TOTAL):
+    thrs[i].join()
+    
+end_time = time.time()
 
-for i in range(TREAD_COUNT):
-    threading.Thread(target=updata_stocks, args=(i, s[i])).start()
+print "--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--"
+print "All %d Threads Process End." % THREADS_TOTAL
+print "It use %d s." % (end_time - start_time)
+print "%d errors occured." % err_stocks.qsize()
+print "Follow Stocks Fetch Failed: "
+while err_stocks.qsize() > 0:
+    print err_stocks.get()
+print "--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--"
