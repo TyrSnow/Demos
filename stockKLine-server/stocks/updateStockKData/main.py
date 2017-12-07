@@ -24,7 +24,7 @@ for stock in stocks:
 def fetch_stock(stock):
     try:
         data = ts.get_hist_data(stock)
-        data.to_csv("./Data/%s.csv" % stock)
+        data.to_csv("/Data/%s.csv" % stock)
     except:
         print "Fetch %s Error, retry after 5 seconds \n" % stock
         err_stocks.put(stock)
