@@ -31,6 +31,8 @@ const CODE = {
     ILLEGAL_USERNAME: C(23002, '非法的用户名'),
     // 文档
     DOC_NOT_EXIST: C(30000, '文档不存在'),
+    // 股票
+    STOCK_NOT_EXIST: C(40000, '股票不存在'),
 };
 exports.default = CODE;
 //# sourceMappingURL=Code.enum.js.map

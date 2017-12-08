@@ -35,6 +35,9 @@ const CODE = {
 
     // 文档
     DOC_NOT_EXIST: C(30000, '文档不存在'),
+
+    // 股票
+    STOCK_NOT_EXIST: C(40000, '股票不存在'),
 }
 
 export default CODE
